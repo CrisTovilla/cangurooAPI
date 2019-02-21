@@ -13,6 +13,7 @@ class ServiceSchema extends Schema {
       table.string('description_a')
       table.integer('location_b_id').unsigned().index('location_b_id')
       table.string('description_b')
+      table.string('reference')
       table.time('date_time_required')
       table.foreign('service_type_id').references('service_types.id')
       table.foreign('client_id').references('clients.id')

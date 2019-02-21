@@ -17,10 +17,22 @@ class UserController {
       .status(400)
       .json({msg:'Ya Existe'})
     }
-    let user=await User.create(request.all())
+    let user;
+    try {
+      let {name,email,password}=request.only(['name','email','password'])
+      user=await User.create({
+         name,
+         email,
+         password,
+         scope:"Admin"
+      })
+    }
+    catch(error) {
+      return response.status(400).send();
+    }
     return response
       .status(201)
-      .json(user)
+      .json({"msg":"Creado"})
   }
 
   /**
@@ -36,7 +48,6 @@ class UserController {
    * GET user
    */
   async show({auth}){
-    console.log("A")
     try {
       return await auth.getUser()
     } catch (error) {
