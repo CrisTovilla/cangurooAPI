@@ -1,6 +1,7 @@
 'use strict'
 const User= use('App/Models/User')
 const Service= use('App/Models/Service')
+const ServiceDelivery= use('App/Models/ServiceDelivery')
 /**
  * Resourceful controller for interacting with servicedeliveries
  */
@@ -24,6 +25,22 @@ class ServiceDeliveryController {
    * POST servicedeliveries
    */
   async store ({ request, response }) {
+    try {
+      let {name,email,password}=request.only(['name','email','password'])
+      let user=await User.create({
+         name,
+         email,
+         password,
+         scope:"Delivery"
+      })
+      let delivery=await ServiceDelivery.create({
+        user_id:user.id,  
+      })
+      return response.status(201).json({"msg":"Creado"})
+    }
+    catch(error) {
+      return response.status(400).send();
+    }
   }
 
   /**

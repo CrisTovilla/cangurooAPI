@@ -11,6 +11,7 @@ class UserSchema extends Schema {
       table.string('email', 254).notNullable().unique()
       table.string('password', 60).notNullable()
       table.string('scope',30).notNullable()
+      table.boolean('isActive').notNullable().defaultTo(1)
       table.timestamps()
     })
   }

@@ -22,12 +22,6 @@ class ClientController {
    * POST clients
    */
   async store ({ request, response }) {
-    let exist=await User.findBy('email',request.input('email'))
-    if(exist){
-      return response
-      .status(400)
-      .json({msg:'Ya Existe'})
-    }
     try {
       let {name,email,password}=request.only(['name','email','password'])
       let user=await User.create({
@@ -43,9 +37,7 @@ class ClientController {
     catch(error) {
       return response.status(400).send();
     }
-    return response
-      .status(201)
-      .json({"msg":"Creado"})
+    return response.status(201).json({"msg":"Creado"})
   }
 
   /**
@@ -61,9 +53,7 @@ class ClientController {
     catch(error) {
       return response.status(400).send();
     }
-    return response
-    .status(200)
-    .json(client)
+    return response.status(200).json(client)
   }
 
  

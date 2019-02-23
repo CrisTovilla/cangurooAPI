@@ -10,6 +10,19 @@ class ServiceDelivery extends Model {
     services(){
         return this.hasMany('App/Models/Service')
     }
+
+    ratings(){
+        return this.hasMany('App/Models/Rating')
+    }
+
+    expenses(){
+        return this.hasMany('App/Models/Expense')
+    }
+
+    CashOut(){
+        return this.hasMany('App/Models/CashOut')
+    }
+
     
 }
 

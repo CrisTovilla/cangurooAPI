@@ -14,6 +14,10 @@ class Client extends Model {
     cards(){
         return this.hasMany('App/Models/Card')
     }
+
+    ratings(){
+        return this.hasMany('App/Models/Raring')
+    }
 }
 
 module.exports = Client

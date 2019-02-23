@@ -15,23 +15,35 @@
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
-const Location = use('App/Models/Location')
-Route.get('locations', async () => {
-  return await Location.all()
-})
 
-Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
-})
 
-//User 
-Route.post('/signup', 'UserController.signup')
-Route.post('/login', 'UserController.login')
-Route.get('/show', 'UserController.show')
-  .middleware(['auth'])
+// Grouped
+Route.group(() => {
+  //User 
+  Route.post('/signup', 'UserController.signup')//Delete to Production
+  Route.post('/login', 'UserController.login')
+  Route.get('/show', 'UserController.show')
+    .middleware(['auth'])
 
-//Client
-Route.post('/signup/client', 'ClientController.store')
-Route.post('/service/create', 'ServiceController.store')
-  .middleware('auth')
-  .middleware('auth_client')
+  //Client
+  Route.post('/client/signup', 'ClientController.store')
+        .validator('StoreUser')
+
+
+  //Service
+  Route.post('/service/create', 'ServiceController.store')
+    .middleware('auth')
+    .middleware('auth_client')
+  Route.get('/service/all', 'ServiceController.index')
+    .middleware('auth')
+    .middleware('auth_admin')
+  Route.get('/service/client', 'ServiceController.client')
+    .middleware('auth')
+  Route.get('/service/:id', 'ServiceController.show')
+    .middleware('auth') 
+    
+
+  //ServiceDelivery 
+  Route.post('/delivery/signup', 'ServiceDeliveryController.store')
+        .validator('StoreUser')
+}).prefix('api/v1')   

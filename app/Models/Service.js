@@ -7,6 +7,10 @@ class Service extends Model {
         return this.hasOne('App/Models/ServiceType')
     }
 
+    serviceStatusType(){
+        return this.hasOne('App/Models/ServiceStatusType')
+    }
+
     locations(){
         return this.hasMany('App/Models/Location')
     }
