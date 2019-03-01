@@ -26,7 +26,7 @@ Route.group(() => {
     .middleware(['auth'])
 
   //Service_Type
-  Route.get('/service_type/create', 'ServiceTypeController.store')
+  Route.post('/service_type/create', 'ServiceTypeController.store')
   .middleware('auth')
   .middleware('auth_admin')
 
