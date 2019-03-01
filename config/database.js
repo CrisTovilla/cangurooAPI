@@ -74,7 +74,7 @@ module.exports = {
   pg: {
     client: 'pg',
     connection: {
-      host: Env.get('DB_HOST','ec2-54-163-234-88.compute-1.amazonaws.com'),
+      host: Env.get('DB_HOST','localhost'),
       port: Env.get('DB_PORT', '5432'),
       user: Env.get('DB_USER', 'madnlhduyvuodk'),
       password: Env.get('DB_PASSWORD', 'adc751560f84f0c8c899ad9219be831cdcf758465e12f22cfb2633010d3ca8ce'),
