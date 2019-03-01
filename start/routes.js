@@ -25,10 +25,15 @@ Route.group(() => {
   Route.get('/show', 'UserController.show')
     .middleware(['auth'])
 
+  //Service_Type
+  Route.get('/service_type/create', 'ServiceTypeController.store')
+  .middleware('auth')
+  .middleware('auth_admin')
+
   //Client
   Route.post('/client/signup', 'ClientController.store')
         .validator('StoreUser')
-
+  
 
   //Service
   Route.post('/service/create', 'ServiceController.store')
