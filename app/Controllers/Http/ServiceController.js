@@ -5,6 +5,7 @@ const ServiceType= use('App/Models/ServiceType')
 const Service= use('App/Models/Service')
 const User= use('App/Models/User')
 const Client= use('App/Models/Client')
+const Ws = use('Ws')
 /**
  * Resourceful controller for interacting with services
  */
@@ -29,7 +30,6 @@ class ServiceController {
   async store ({ auth,request, response }) {
     try{
       let time_required=new Date(request.input('date_time_required')) 
-      let user=await auth.getUser()
       let serviceType=await ServiceType.findBy('name',request.input('service_type'))
       let location_a=await Location.create({
         'latitude' : '0',
@@ -41,6 +41,8 @@ class ServiceController {
         'longitude' : '0',
         'address' : request.input('location_b'),
       })
+      let user =await auth.getUser()
+      let client=await Client.findBy('user_id',user.id)
       let service=await Service.create({
         description_a : request.input('description_a'),
         location_a_id : location_a.id,
@@ -49,8 +51,16 @@ class ServiceController {
         service_type_id : serviceType.id,
         date_time_required : time_required ,
         reference : request.input('reference'),
-        client_id: user.id,    
-      })
+        client_id: client.id,
+        price_deliver:"10",
+        price_service:"50",
+        service_status_type_id: 1,    
+      }) 
+      const channel= Ws.getChannel('service').topic('service')
+      if(channel){
+        channel.broadcast('service',service)
+      }
+
       return response.status(201).json(service)
     }catch(error) {
       return response.status(400).send(error);
