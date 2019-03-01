@@ -30,6 +30,11 @@ Route.group(() => {
   .middleware('auth')
   .middleware('auth_admin')
 
+  //Service_Status_Type
+  Route.post('/service_status_type/create', 'ServiceStatusTypeController.store')
+    .middleware('auth')
+    .middleware('auth_admin')
+
   //Client
   Route.post('/client/signup', 'ClientController.store')
         .validator('StoreUser')
