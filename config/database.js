@@ -5,7 +5,8 @@ const Env = use('Env')
 
 /** @type {import('@adonisjs/ignitor/src/Helpers')} */
 const Helpers = use('Helpers')
-
+const Url = require('url-parse')
+const CLEARDB_DATABASE_URL = new Url(Env.get('CLEARDB_DATABASE_URL'))
 module.exports = {
   /*
   |--------------------------------------------------------------------------
@@ -73,11 +74,11 @@ module.exports = {
   pg: {
     client: 'pg',
     connection: {
-      host: Env.get('DB_HOST', 'localhost'),
-      port: Env.get('DB_PORT', '5432'),
-      user: Env.get('DB_USER', 'madnlhduyvuodk'),
-      password: Env.get('DB_PASSWORD', 'adc751560f84f0c8c899ad9219be831cdcf758465e12f22cfb2633010d3ca8ce'),
-      database: Env.get('DB_DATABASE', 'd7lbkf1jgiucch')
+      host: Env.get('DB_HOST', CLEARDB_DATABASE_URL.host),
+      port: Env.get('DB_PORT', ''),
+      user: Env.get('DB_USER', CLEARDB_DATABASE_URL.username),
+      password: Env.get('DB_PASSWORD', CLEARDB_DATABASE_URL.password),
+      database: Env.get('DB_DATABASE', CLEARDB_DATABASE_URL.pathname.substr(1))
     },
     debug: Env.get('DB_DEBUG', false)
   }
