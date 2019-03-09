@@ -66,6 +66,14 @@ class ServiceController {
       })
       const channel = Ws.getChannel('service').topic('service')
       if (channel) {
+        service.location_a = await service.location_a_().fetch()
+        service.location_b = await service.location_b_().fetch()
+        service.service_status_type = await service.serviceStatusType().fetch()
+        service.service_type = await service.serviceType().fetch()
+        if (service.service_delivery) {
+          service.service_delivery = await service.serviceDelivery().fetch()
+        }
+        service.client = await service.client_().fetch()
         channel.broadcast('service', service)
       }
 
