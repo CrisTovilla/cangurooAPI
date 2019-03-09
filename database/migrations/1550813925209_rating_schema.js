@@ -8,8 +8,8 @@ class RatingSchema extends Schema {
       table.increments()
       table.integer('stars',1)
       table.string('comment')
-      table.integer('service_delivery_id').unsigned().references('id').inTable('service_deliveries')
-      table.integer('client_id').unsigned().references('id').inTable('clients')
+      table.integer('service_delivery').unsigned().references('id').inTable('users')
+      table.integer('client').unsigned().references('id').inTable('users')
       table.timestamps()
     })
   }

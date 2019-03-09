@@ -1,7 +1,7 @@
 'use strict'
 const User= use('App/Models/User')
 const Service= use('App/Models/Service')
-const ServiceDelivery= use('App/Models/ServiceDelivery')
+const Database = use('Database')
 /**
  * Resourceful controller for interacting with servicedeliveries
  */
@@ -10,33 +10,34 @@ class ServiceDeliveryController {
    * Show a list of all servicedeliveries.
    * GET servicedeliveries
    */
-  async index ({ request, response, view }) {
+  async index ({ request, response }) {
+    const deliveries=await Database
+    .select('id','name','email')
+    .from('users')
+    .where('scope', 'Delivery')
+    
+    return response
+    .status(200)
+    .json(deliveries)
   }
 
-  /**
-   * Render a form to be used for creating a new servicedelivery.
-   * GET servicedeliveries/create
-   */
-  async create ({ request, response, view }) {
-  }
+  
 
   /**
    * Create/save a new servicedelivery.
    * POST servicedeliveries
    */
   async store ({ request, response }) {
+    let user=null
     try {
       let {name,email,password}=request.only(['name','email','password'])
-      let user=await User.create({
+      user=await User.create({
          name,
          email,
          password,
          scope:"Delivery"
       })
-      let delivery=await ServiceDelivery.create({
-        user_id:user.id,  
-      })
-      return response.status(201).json({"msg":"Creado"})
+      return response.status(201).json(user)
     }
     catch(error) {
       return response.status(400).send();
@@ -44,32 +45,25 @@ class ServiceDeliveryController {
   }
 
   /**
-   * Display a single servicedelivery.
-   * GET servicedeliveries/:id
+   * Display all services of a delivery.
+   * GET delivery/services
    */
-  async show ({ params, request, response, view }) {
+  async services({ auth, response }) {
+    let user = await User.find(auth.user.id)
+    let services = await user.services_delivery().fetch()
+    for (let i in services.rows) {
+      const service = services.rows[i]
+      service.location_a = await service.location_a_().fetch()
+      service.location_b = await service.location_b_().fetch()
+      service.service_status_type = await service.serviceStatusType().fetch()
+      service.service_type = await service.serviceType().fetch()
+      if (service.service_delivery) {
+        service.service_delivery = await service.serviceDelivery().fetch()
+      }
+    }
+    return response.status(200).json(services)
   }
-
-  /**
-   * Render a form to update an existing servicedelivery.
-   * GET servicedeliveries/:id/edit
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update servicedelivery details.
-   * PUT or PATCH servicedeliveries/:id
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a servicedelivery with id.
-   * DELETE servicedeliveries/:id
-   */
-  async destroy ({ params, request, response }) {
-  }
+ 
 }
 
 module.exports = ServiceDeliveryController

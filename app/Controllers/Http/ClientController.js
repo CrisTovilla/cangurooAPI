@@ -1,6 +1,5 @@
 'use strict'
 const User= use('App/Models/User')
-const Client= use('App/Models/Client')
 /**
  * Resourceful controller for interacting with clients
  */
@@ -22,22 +21,20 @@ class ClientController {
    * POST clients
    */
   async store ({ request, response }) {
+    let user=null
     try {
       let {name,email,password}=request.only(['name','email','password'])
-      let user=await User.create({
+      user=await User.create({
          name,
          email,
          password,
          scope:"Cliente"
       })
-      let client=await Client.create({
-        user_id:user.id,  
-      })
     }
     catch(error) {
       return response.status(400).send();
     }
-    return response.status(201).json({"msg":"Creado"})
+    return response.status(201).json(user)
   }
 
   /**
@@ -48,7 +45,7 @@ class ClientController {
     let {id}=params
     let client;
     try {
-     client =await Client.findOrFail(id) 
+     client =await User.findByOrFail('scope', 'Cliente','id',id)
     }
     catch(error) {
       return response.status(400).send();
@@ -56,20 +53,26 @@ class ClientController {
     return response.status(200).json(client)
   }
 
- 
   /**
-   * Update client details.
-   * PUT or PATCH clients/:id
-   */
-  async update ({ params, request, response }) {
+ * Display all services of a client.
+ * GET client/services
+ */
+async services({ auth, response }) {
+  let user = await User.find(auth.user.id)
+  let services = await user.services().fetch()
+  for (let i in services.rows) {
+    const service = services.rows[i]
+    service.location_a = await service.location_a_().fetch()
+    service.location_b = await service.location_b_().fetch()
+    service.service_status_type = await service.serviceStatusType().fetch()
+    service.service_type = await service.serviceType().fetch()
+    if (service.service_delivery) {
+      service.service_delivery = await service.serviceDelivery().fetch()
+    }
   }
-
-  /**
-   * Delete a client with id.
-   * DELETE clients/:id
-   */
-  async destroy ({ params, request, response }) {
-  }
+  return response.status(200).json(services)
+}
+  
 }
 
 module.exports = ClientController

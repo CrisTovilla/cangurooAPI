@@ -18,3 +18,4 @@ const Ws = use('Ws')
 Ws.channel('service', 'ServiceController')
 .middleware(['auth_admin'])
 
+Ws.channel('location', 'LocationController')

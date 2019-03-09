@@ -7,6 +7,9 @@ const Model = use('Model')
 const Hash = use('Hash')
 
 class User extends Model {
+  static get hidden () {
+    return ['password']
+  }
   static boot () {
     super.boot()
 
@@ -33,6 +36,19 @@ class User extends Model {
    */
   tokens () {
     return this.hasMany('App/Models/Token')
+  }
+
+  services(){
+    return this.hasMany('App/Models/Service','id','client')
+  }
+
+  services_delivery(){
+    return this.hasMany('App/Models/Service','id','service_delivery')
+  }
+
+
+  notifications(){
+    return this.hasMany('App/Models/Notification')
   }
 }
 

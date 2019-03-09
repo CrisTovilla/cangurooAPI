@@ -27,8 +27,8 @@ Route.group(() => {
 
   //Service_Type
   Route.post('/service_type/create', 'ServiceTypeController.store')
-  .middleware('auth')
-  .middleware('auth_admin')
+    .middleware('auth')
+    .middleware('auth_admin')
 
   //Service_Status_Type
   Route.post('/service_status_type/create', 'ServiceStatusTypeController.store')
@@ -37,8 +37,11 @@ Route.group(() => {
 
   //Client
   Route.post('/client/signup', 'ClientController.store')
-        .validator('StoreUser')
-  
+    .validator('StoreUser')
+  Route.get('/client/services', 'ClientController.services')
+    .middleware('auth')
+    .middleware('auth_client')
+
 
   //Service
   Route.post('/service/create', 'ServiceController.store')
@@ -47,13 +50,23 @@ Route.group(() => {
   Route.get('/service/all', 'ServiceController.index')
     .middleware('auth')
     .middleware('auth_admin')
-  Route.get('/service/client', 'ServiceController.client')
+  Route.get('/service/client/:id', 'ServiceController.client')
+    .middleware('auth')
+  Route.get('/service/delivery/:id', 'ServiceController.delivery')
     .middleware('auth')
   Route.get('/service/:id', 'ServiceController.show')
-    .middleware('auth') 
-    
+    .middleware('auth')
+
 
   //ServiceDelivery 
   Route.post('/delivery/signup', 'ServiceDeliveryController.store')
-        .validator('StoreUser')
+    .validator('StoreUser')
+  Route.get('/delivery/all', 'ServiceDeliveryController.index')
+    .middleware('auth')
+    .middleware('auth_admin')
+  Route.get('/delivery/services', 'ServiceDeliveryController.services')
+    .middleware('auth')
+    .middleware('auth_delivery')
+
+
 }).prefix('api/v1')   

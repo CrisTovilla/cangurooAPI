@@ -1,11 +1,9 @@
 'use strict'
-const { validate } = use('Validator')
-const Location= use('App/Models/Location')
-const ServiceType= use('App/Models/ServiceType')
-const Service= use('App/Models/Service')
-const User= use('App/Models/User')
-const Client= use('App/Models/Client')
+const Location = use('App/Models/Location')
+const ServiceType = use('App/Models/ServiceType')
+const Service = use('App/Models/Service')
 const Ws = use('Ws')
+const User = use('App/Models/User')
 /**
  * Resourceful controller for interacting with services
  */
@@ -14,12 +12,22 @@ class ServiceController {
    * Show a list of all services.
    * GET services
    */
-  async index ({response}) {
-    let services=await Service.all()
-   
+  async index({ response }) {
+    let services = await Service.all()
+    for (let i in services.rows) {
+      const service = services.rows[i]
+      service.location_a = await service.location_a_().fetch()
+      service.location_b = await service.location_b_().fetch()
+      service.service_status_type = await service.serviceStatusType().fetch()
+      service.service_type = await service.serviceType().fetch()
+      if (service.service_delivery) {
+        service.service_delivery = await service.serviceDelivery().fetch()
+      }
+      service.client = await service.client_().fetch()
+    }
     return response
-    .status(200)
-    .json(services)
+      .status(200)
+      .json(services)
   }
 
 
@@ -27,81 +35,107 @@ class ServiceController {
    * Create/save a new service.
    * POST services
    */
-  async store ({ auth,request, response }) {
-    try{
-      let time_required=new Date(request.input('date_time_required')) 
-      let serviceType=await ServiceType.findBy('name',request.input('service_type'))
-      let location_a=await Location.create({
-        'latitude' : '0',
-        'longitude' : '0',
-        'address' : request.input('location_a'),
+  async store({ auth, request, response }) {
+    try {
+      let time_required = new Date(request.input('date_time_required'))
+      let serviceType = await ServiceType.findBy('name', request.input('service_type'))
+      let location_a = await Location.create({
+        'latitude': request.input('latitude_a'),
+        'longitude': request.input('longitude_a'),
+        'address': request.input('location_a'),
       })
-      let location_b=await Location.create({
-        'latitude' : '0',
-        'longitude' : '0',
-        'address' : request.input('location_b'),
+      let location_b = await Location.create({
+        'latitude': request.input('latitude_b'),
+        'longitude': request.input('longitude_b'),
+        'address': request.input('location_b'),
       })
-      let user =await auth.getUser()
-      let client=await Client.findBy('user_id',user.id)
-      let service=await Service.create({
-        description_a : request.input('description_a'),
-        location_a_id : location_a.id,
-        description_b : request.input('description_b'),
-        location_b_id : location_b.id,
-        service_type_id : serviceType.id,
-        date_time_required : time_required ,
-        reference : request.input('reference'),
-        client_id: client.id,
-        price_deliver:"10",
-        price_service:"50",
-        service_status_type_id: 1,    
-      }) 
-      const channel= Ws.getChannel('service').topic('service')
-      if(channel){
-        channel.broadcast('service',service)
+      let user = await auth.getUser()
+      let client = await User.find(user.id)
+      let service = await Service.create({
+        description_a: request.input('description_a'),
+        location_a: location_a.id,
+        description_b: request.input('description_b'),
+        location_b: location_b.id,
+        service_type: serviceType.id,
+        date_time_required: time_required,
+        reference: request.input('reference'),
+        client: client.id,
+        price_deliver: "10",
+        price_service: "50",
+        service_status_type: 1,
+      })
+      const channel = Ws.getChannel('service').topic('service')
+      if (channel) {
+        channel.broadcast('service', service)
       }
 
       return response.status(201).json(service)
-    }catch(error) {
+    } catch (error) {
+      console.log(error)
       return response.status(400).send(error);
-    }  
+    }
   }
 
   /**
    * Display a single service.
    * GET services/:id
    */
-  async show ({ params,response}) {
-    let {id}=params
-    let service= await Service.find(id)
+  async show({ params, response }) {
+    let { id } = params
+    let service = await Service.find(id)
+    service.location_a = await service.location_a_().fetch()
+    service.location_b = await service.location_b_().fetch()
+    service.service_status_type = await service.serviceStatusType().fetch()
+    service.service_type = await service.serviceType().fetch()
+    if (service.service_delivery) {
+      service.service_delivery = await service.serviceDelivery().fetch()
+    }
+
     return response.status(200).json(service)
   }
 
-    /**
-   * Display all services of a client.
-   * GET service/client
-   */
-  async client ({ auth, response }) {
-    let client=await Client.find(auth.user.id)
-    let services=await client.services().fetch()
+  /**
+ * Display all services of a client.
+ * GET service/client
+ */
+  async client({ params, response }) {
+    let { id } = params
+    let user = await User.find(id)
+    let services = await user.services().fetch()
+    for (let i in services.rows) {
+      const service = services.rows[i]
+      service.location_a = await service.location_a_().fetch()
+      service.location_b = await service.location_b_().fetch()
+      service.service_status_type = await service.serviceStatusType().fetch()
+      service.service_type = await service.serviceType().fetch()
+      if (service.service_delivery) {
+        service.service_delivery = await service.serviceDelivery().fetch()
+      }
+    }
     return response.status(200).json(services)
   }
 
-
-
-  /**
-   * Update service details.
-   * PUT or PATCH services/:id
+    /**
+   * Display all services of a delivery.
+   * GET service/delivery
    */
-  async update ({ params, request, response }) {
+  async delivery({ params, response }) {
+    let { id } = params
+    let user = await User.find(id)
+    let services = await user.services_delivery().fetch()
+    for (let i in services.rows) {
+      const service = services.rows[i]
+      service.location_a = await service.location_a_().fetch()
+      service.location_b = await service.location_b_().fetch()
+      service.service_status_type = await service.serviceStatusType().fetch()
+      service.service_type = await service.serviceType().fetch()
+      if (service.service_delivery) {
+        service.service_delivery = await service.serviceDelivery().fetch()
+      }
+    }
+    return response.status(200).json(services)
   }
 
-  /**
-   * Delete a service with id.
-   * DELETE services/:id
-   */
-  async destroy ({ params, request, response }) {
-  }
 }
 
 module.exports = ServiceController

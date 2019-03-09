@@ -4,23 +4,27 @@ const Model = use('Model')
 
 class Service extends Model {
     serviceType(){
-        return this.hasOne('App/Models/ServiceType')
+        return this.hasOne('App/Models/ServiceType','service_type','id')
     }
 
     serviceStatusType(){
-        return this.hasOne('App/Models/ServiceStatusType')
+        return this.hasOne('App/Models/ServiceStatusType','service_status_type','id')
     }
 
-    locations(){
-        return this.hasMany('App/Models/Location')
+    location_a_(){
+        return this.hasOne('App/Models/Location','location_a','id')
     }
 
-    serviceDeliver(){
-        return this.hasOne('App/Models/ServiceDeliver')
+    location_b_(){
+        return this.hasOne('App/Models/Location','location_b','id')
     }
 
-    client(){
-        return this.hasOne('App/Models/Client')
+    serviceDelivery(){
+        return this.hasOne('App/Models/User','service_delivery','id')
+    }
+
+    client_(){
+        return this.hasOne('App/Models/User','client','id')
     }
     
 }
