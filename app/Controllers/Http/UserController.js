@@ -11,13 +11,7 @@ class UserController {
    * POST users
    */
   async signup ({ request, response }) {
-    let exist=await User.findBy('email',request.input('email'))
-    if(exist){
-      return response
-      .status(400)
-      .json({msg:'Ya Existe'})
-    }
-    let user;
+    let user=null;
     try {
       let {name,email,password}=request.only(['name','email','password'])
       user=await User.create({
