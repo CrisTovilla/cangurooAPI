@@ -56,6 +56,12 @@ Route.group(() => {
     .middleware('auth')
   Route.get('/service/:id', 'ServiceController.show')
     .middleware('auth')
+  Route.put('/service/:id/edit/status', 'ServiceController.edit_status')
+    .middleware('auth')
+    .middleware('auth_admin')
+  Route.put('/service/:id/edit/delivery', 'ServiceController.edit_delivery')
+    .middleware('auth')
+    .middleware('auth_admin')
 
 
   //ServiceDelivery 

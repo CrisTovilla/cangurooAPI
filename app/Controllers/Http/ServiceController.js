@@ -1,6 +1,7 @@
 'use strict'
 const Location = use('App/Models/Location')
 const ServiceType = use('App/Models/ServiceType')
+const ServiceStatusType = use('App/Models/ServiceStatusType')
 const Service = use('App/Models/Service')
 const Ws = use('Ws')
 const User = use('App/Models/User')
@@ -144,6 +145,30 @@ class ServiceController {
     return response.status(200).json(services)
   }
 
+  async edit_status({params,request, response}){
+    let{id}=params
+    let service=await Service.findOrFail(id)
+    let{name}=request.only('name')
+    let status=await ServiceStatusType.findBy('name',name)
+    service.service_status_type=status.id
+    await service.save()
+    return response.status(200).json({'msg':'Updated'})
+  }
+
+  async edit_delivery({params,request, response}){
+    let{id}=params
+    let service=await Service.findOrFail(id)
+    let{delivery_id}=request.only('delivery_id')
+    console.log(delivery_id)
+    let user=await User.findOrFail(delivery_id)
+    console.log(user.scope)
+    if(user.scope=='Delivery'){
+      service.service_delivery=user.id
+      await service.save()
+      return response.status(200).json({'msg':'Updated'})      
+    }
+    return response.status(400).send({'msg':'No Delivery'});  
+  }
 }
 
 module.exports = ServiceController
