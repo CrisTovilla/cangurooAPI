@@ -11,7 +11,7 @@ class ServiceDeliveryController {
    * Show a list of all servicedeliveries.
    * GET servicedeliveries
    */
-  async index ({ request, response }) {
+  async index ({  response }) {
     const deliveries=await Database
     .select('id','name','email')
     .from('users')
