@@ -70,7 +70,13 @@ Route.group(() => {
   Route.get('/delivery/all', 'ServiceDeliveryController.index')
     .middleware('auth')
     .middleware('auth_admin')
+  Route.get('/delivery/all/locations', 'ServiceDeliveryController.index_locations')
+    .middleware('auth')
+    .middleware('auth_admin')
   Route.get('/delivery/services', 'ServiceDeliveryController.services')
+    .middleware('auth')
+    .middleware('auth_delivery')
+  Route.post('/delivery/location', 'ServiceDeliveryController.location')
     .middleware('auth')
     .middleware('auth_delivery')
 

@@ -1,7 +1,8 @@
 'use strict'
 const User= use('App/Models/User')
-const Service= use('App/Models/Service')
+const DeliveryLocation= use('App/Models/DeliveryLocation')
 const Database = use('Database')
+const Ws = use('Ws')
 /**
  * Resourceful controller for interacting with servicedeliveries
  */
@@ -15,6 +16,20 @@ class ServiceDeliveryController {
     .select('id','name','email')
     .from('users')
     .where('scope', 'Delivery')
+    
+    return response
+    .status(200)
+    .json(deliveries)
+  }
+
+  /**
+   * Show a list of all location deliveries.
+   */
+  async index_locations ({  response }) {
+    const deliveries=await Database
+    .select('users.id','name','email','latitude','longitude')
+    .from('delivery_locations')
+    .leftJoin('users', 'users.id', 'delivery_locations.delivery')
     
     return response
     .status(200)
@@ -63,7 +78,36 @@ class ServiceDeliveryController {
     }
     return response.status(200).json(services)
   }
+
+   /**
+   * Control event onLocation
+   * WebSocket
+   */
+  async location({auth,request, response}){
+    let delivery=auth.user.id
+    let{latitude,longitude}=request.only(['latitude','longitude'])
+    let deliver_location= await DeliveryLocation.findBy('delivery',delivery)
+    if(deliver_location){
+      deliver_location.latitude=latitude
+      deliver_location.longitude=longitude
+      await deliver_location.save()
+    }else{
+      deliver_location=await DeliveryLocation.create({
+        delivery,
+        latitude,
+        longitude,
+     })
+    }
+    const channel = Ws.getChannel('location').topic('location')
+    if (channel) {
+      deliver_location.delivery = await deliver_location.user().fetch()
+      channel.broadcast('location', deliver_location)
+    }
+    return response.status(200).json(deliver_location)
+  }
  
+
+
 }
 
 module.exports = ServiceDeliveryController
