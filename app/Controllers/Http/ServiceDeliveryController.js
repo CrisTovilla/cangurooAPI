@@ -104,6 +104,7 @@ class ServiceDeliveryController {
       .select('users.id','name','email','latitude','longitude')
       .from('delivery_locations')
       .leftJoin('users', 'users.id', 'delivery_locations.delivery')
+      .first()
       //deliver_location.delivery = await deliver_location.user().fetch()
       channel.broadcast('location', deliver_location)
     }
