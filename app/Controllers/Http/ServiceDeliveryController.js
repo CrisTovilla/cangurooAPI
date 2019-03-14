@@ -100,7 +100,11 @@ class ServiceDeliveryController {
     }
     const channel = Ws.getChannel('location').topic('location')
     if (channel) {
-      deliver_location.delivery = await deliver_location.user().fetch()
+      const deliver_location=await Database
+      .select('users.id','name','email','latitude','longitude')
+      .from('delivery_locations')
+      .leftJoin('users', 'users.id', 'delivery_locations.delivery')
+      //deliver_location.delivery = await deliver_location.user().fetch()
       channel.broadcast('location', deliver_location)
     }
     return response.status(200).json(deliver_location)
