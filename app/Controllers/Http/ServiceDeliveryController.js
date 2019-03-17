@@ -105,12 +105,10 @@ class ServiceDeliveryController {
       .from('delivery_locations')
       .leftJoin('users', 'users.id', 'delivery_locations.delivery')
       .first()
-      //deliver_location.delivery = await deliver_location.user().fetch()
       channel.broadcast('location', deliver_location)
     }
     return response.status(200).json(deliver_location)
   }
- 
 
 
 }

@@ -3,6 +3,10 @@
 const Model = use('Model')
 
 class Service extends Model {
+    static get updatedAtColumn () {
+        return 'updated_at'
+    }
+
     serviceType(){
         return this.hasOne('App/Models/ServiceType','service_type','id')
     }

@@ -5,6 +5,7 @@ const ServiceStatusType = use('App/Models/ServiceStatusType')
 const Service = use('App/Models/Service')
 const Ws = use('Ws')
 const User = use('App/Models/User')
+const Database = use('Database')
 /**
  * Resourceful controller for interacting with services
  */
@@ -141,6 +142,31 @@ class ServiceController {
       if (service.service_delivery) {
         service.service_delivery = await service.serviceDelivery().fetch()
       }
+    }
+    return response.status(200).json(services)
+  }
+
+   /**
+   * Display all services finished of all deliveries today.
+   * GET service/all/finished
+   */
+  async services_finished({  response }) {
+    var date=new Date(Date.now())
+    date.setDate(date.getDate())
+    date.setHours(-1,-1,-1,-1)
+    console.log(date)
+    const services=await Service
+    .query()
+    .orderBy('service_delivery')
+    .having('service_status_type','=', 3)
+    .having('updated_at','>', date)
+    .fetch()
+    for (let i in services.rows) {
+      const service = services.rows[i]
+      service.location_a = await service.location_a_().fetch()
+      service.location_b = await service.location_b_().fetch()
+      service.service_status_type = await service.serviceStatusType().fetch()
+      service.service_type = await service.serviceType().fetch()
     }
     return response.status(200).json(services)
   }

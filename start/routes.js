@@ -50,6 +50,9 @@ Route.group(() => {
   Route.get('/service/all', 'ServiceController.index')
     .middleware('auth')
     .middleware('auth_admin')
+  Route.get('/service/all/finished', 'ServiceController.services_finished')
+    .middleware('auth')
+    .middleware('auth_admin')
   Route.get('/service/client/:id', 'ServiceController.client')
     .middleware('auth')
   Route.get('/service/delivery/:id', 'ServiceController.delivery')
@@ -80,5 +83,20 @@ Route.group(() => {
     .middleware('auth')
     .middleware('auth_delivery')
 
+  //Expense
+  Route.post('/expense/create', 'ExpenseController.store')
+  .middleware('auth')
+  .middleware('auth_admin')
+  Route.get('/expense/all', 'ExpenseController.index')
+  .middleware('auth')
+  .middleware('auth_admin')
+
+  //CashOut
+  Route.post('/cashout/create', 'CashOutController.store')
+  .middleware('auth')
+  .middleware('auth_admin')
+  Route.get('/cashout/all', 'CashOutController.index')
+  .middleware('auth')
+  .middleware('auth_admin')
 
 }).prefix('api/v1')   
