@@ -19,6 +19,10 @@ class ExpenseController {
     .orderBy('service_delivery')
     .having('updated_at','>', date)
     .fetch()
+    for (let i in expenses.rows) {
+      const expense = expenses.rows[i]
+      expense.expense_type=await expense.expenseType().fetch()
+    }
     return response.status(201).json(expenses)
   }
 

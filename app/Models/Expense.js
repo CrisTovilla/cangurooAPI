@@ -7,7 +7,7 @@ class Expense extends Model {
         return this.hasOne('App/Models/ServiceDelivery')
     }
     expenseType(){
-        return this.hasOne('App/Models/ServiceDelivery')
+        return this.hasOne('App/Models/ExpenseType','expense_type','id')
     }
 }
 
