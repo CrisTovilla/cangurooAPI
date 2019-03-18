@@ -232,6 +232,7 @@ class ServiceController {
     const service = await Service.findOrFail(id)
     if(service.client==user.id){
       service.client=null
+      await service.save()
       return response.status(200).json(service)
     }
     return response.status(400).send({'msg':'Service not client'});  
