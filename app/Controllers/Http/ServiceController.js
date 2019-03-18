@@ -221,6 +221,22 @@ class ServiceController {
     return response.status(400).send({'msg':'Service not client'});  
     
   }
+
+    /**
+   * Remove service from client.
+   * DELETE /service/client/:id
+   */
+  async destroy({auth,params,response}){
+    let{id}=params
+    let user = await User.findOrFail(auth.user.id)
+    const service = await Service.findOrFail(id)
+    if(service.client==user.id){
+      service.client=null
+      return response.status(200).json(service)
+    }
+    return response.status(400).send({'msg':'Service not client'});  
+    
+  }
 }
 
 module.exports = ServiceController

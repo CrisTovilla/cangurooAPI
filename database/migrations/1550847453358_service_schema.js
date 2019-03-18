@@ -7,7 +7,7 @@ class ServiceSchema extends Schema {
     this.create('services', (table) => {
       table.increments()
       table.integer('service_type').unsigned().references('id').inTable('service_types')
-      table.integer('client').notNullable().unsigned().references('id').inTable('users')
+      table.integer('client').unsigned().references('id').inTable('users')
       table.integer('service_delivery').unsigned().references('id').inTable('users')
       table.integer('location_a').notNullable().unsigned().references('id').inTable('locations')
       table.string('description_a').notNullable()
