@@ -18,7 +18,7 @@ class ClientController {
 
   /**
    * Create/save a new client.
-   * POST clients
+   * POST /client/signup
    */
   async store ({ request, response }) {
     let user=null

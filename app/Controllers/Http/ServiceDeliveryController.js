@@ -9,7 +9,7 @@ const Ws = use('Ws')
 class ServiceDeliveryController {
   /**
    * Show a list of all servicedeliveries.
-   * GET servicedeliveries
+   * GET /delivery/all
    */
   async index ({  response }) {
     const deliveries=await Database
@@ -24,6 +24,7 @@ class ServiceDeliveryController {
 
   /**
    * Show a list of all location deliveries.
+   * GET /delivery/all/locations
    */
   async index_locations ({  response }) {
     const deliveries=await Database
@@ -40,7 +41,7 @@ class ServiceDeliveryController {
 
   /**
    * Create/save a new servicedelivery.
-   * POST servicedeliveries
+   * POST /delivery/signup
    */
   async store ({ request, response }) {
     let user=null
@@ -82,6 +83,7 @@ class ServiceDeliveryController {
    /**
    * Control event onLocation
    * WebSocket
+   * POST /delivery/location
    */
   async location({auth,request, response}){
     let delivery=auth.user.id

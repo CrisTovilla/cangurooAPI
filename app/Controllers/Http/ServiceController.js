@@ -171,6 +171,10 @@ class ServiceController {
     return response.status(200).json(services)
   }
 
+   /**
+   * Edit status of service.
+   * PUT /service/:id/edit/status
+   */
   async edit_status({params,request, response}){
     let{id}=params
     let service=await Service.findOrFail(id)
@@ -181,6 +185,10 @@ class ServiceController {
     return response.status(200).json({'msg':'Updated'})
   }
 
+    /**
+   * Edit delivery of service.
+   * PUT /service/:id/edit/delivery
+   */
   async edit_delivery({params,request, response}){
     let{id}=params
     let service=await Service.findOrFail(id)

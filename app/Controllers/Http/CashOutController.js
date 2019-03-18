@@ -7,8 +7,8 @@ const User = use('App/Models/User')
  */
 class CashOutController {
   /**
-   * Show a list of all cashouts.
-   * GET cashouts
+   * Show a list of all cashouts of today.
+   * GET /cashout/all
    */
   async index ({  response }) {
     var date=new Date(Date.now())
@@ -25,7 +25,7 @@ class CashOutController {
   
   /**
    * Create/save a new cashout.
-   * POST cashouts
+   * POST /cashout/create
    */
   async store ({ request, response }) {
     let { service_delivery,total_amount } = request.only(['service_delivery','total_amount'])

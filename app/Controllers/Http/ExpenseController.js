@@ -8,7 +8,7 @@ const ExpenseType= use('App/Models/ExpenseType')
 class ExpenseController {
   /**
    * Show a list of all expenses of today.
-   * GET expenses
+   * GET /expense/all
    */
   async index ({  response}) {
     var date=new Date(Date.now())
@@ -29,7 +29,7 @@ class ExpenseController {
 
   /**
    * Create/save a new expense.
-   * POST expenses
+   * POST /expense/create
    */
   async store ({ request, response }) {
     let { service_delivery,expense_type,amount } = request.only(['service_delivery','expense_type','amount'])
