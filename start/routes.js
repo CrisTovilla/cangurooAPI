@@ -29,11 +29,15 @@ Route.group(() => {
   Route.post('/service_type/create', 'ServiceTypeController.store')
     .middleware('auth')
     .middleware('auth_admin')
+  Route.get('/service_type/all', 'ServiceTypeController.index')
+    .middleware('auth')
 
   //Service_Status_Type
   Route.post('/service_status_type/create', 'ServiceStatusTypeController.store')
     .middleware('auth')
     .middleware('auth_admin')
+  Route.get('/service_status_type/all', 'ServiceStatusTypeController.index')
+    .middleware('auth')
 
   //Client
   Route.post('/client/signup', 'ClientController.store')

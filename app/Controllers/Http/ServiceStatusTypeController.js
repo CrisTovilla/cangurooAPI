@@ -5,6 +5,16 @@ const ServiceStatusType= use('App/Models/ServiceStatusType')
  */
 class ServiceStatusTypeController {
 
+
+    /**
+   * Get All servicestatustype.
+   * GET /service_status_type/all
+   */
+  async index ({ response }) {
+    let services_status_type = await ServiceStatusType.all()
+    return response.status(201).json(services_status_type)
+  }
+
   /**
    * Create/save a new servicestatustype.
    * POST /service_status_type/create
