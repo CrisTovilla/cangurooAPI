@@ -101,6 +101,14 @@ Route.group(() => {
   .middleware('auth')
   .middleware('auth_admin')
 
+
+  //Expense_Type
+  Route.post('/expense_type/create', 'ExpenseTypeController.store')
+    .middleware('auth')
+    .middleware('auth_admin')
+  Route.get('/expense_type/all', 'ExpenseTypeController.index')
+    .middleware('auth')
+
   //CashOut
   Route.post('/cashout/create', 'CashOutController.store')
   .middleware('auth')
