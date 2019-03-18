@@ -26,7 +26,9 @@ class ServiceController {
       if (service.service_delivery) {
         service.service_delivery = await service.serviceDelivery().fetch()
       }
-      service.client = await service.client_().fetch()
+      if(service.client){
+        service.client = await service.client_().fetch()
+      }
     }
     return response
       .status(200)
@@ -76,7 +78,9 @@ class ServiceController {
         if (service.service_delivery) {
           service.service_delivery = await service.serviceDelivery().fetch()
         }
-        service.client = await service.client_().fetch()
+        if(service.client){
+          service.client = await service.client_().fetch()
+        }       
         channel.broadcast('service', service)
       }
 
