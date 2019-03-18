@@ -190,6 +190,7 @@ class ServiceController {
     console.log(user.scope)
     if(user.scope=='Delivery'){
       service.service_delivery=user.id
+      service.service_status_type=2
       await service.save()
       return response.status(200).json({'msg':'Updated'})      
     }
