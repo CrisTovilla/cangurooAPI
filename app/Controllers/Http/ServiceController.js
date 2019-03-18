@@ -1,5 +1,6 @@
 'use strict'
 const Location = use('App/Models/Location')
+const DeliveryLocation= use('App/Models/DeliveryLocation')
 const ServiceType = use('App/Models/ServiceType')
 const ServiceStatusType = use('App/Models/ServiceStatusType')
 const Service = use('App/Models/Service')
@@ -203,6 +204,22 @@ class ServiceController {
       return response.status(200).json({'msg':'Updated'})      
     }
     return response.status(400).send({'msg':'No Delivery'});  
+  }
+
+  /**
+   * Display last location of delivery of a service.
+   * GET service/:id/location
+   */
+  async location_service({auth,params,response}){
+    let{id}=params
+    let user = await User.findOrFail(auth.user.id)
+    const service = await Service.findOrFail(id)
+    if(service.client==user.id){
+      const deliver_location=await DeliveryLocation.findByOrFail('delivery',service.delivery)
+      return response.status(200).json(deliver_location)
+    }
+    return response.status(400).send({'msg':'Service not client'});  
+    
   }
 }
 
