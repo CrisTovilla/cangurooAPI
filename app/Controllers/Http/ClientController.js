@@ -28,7 +28,7 @@ class ClientController {
          name,
          email,
          password,
-         scope:"Cliente"
+         scope:"Client"
       })
     }
     catch(error) {
@@ -45,7 +45,7 @@ class ClientController {
     let {id}=params
     let client;
     try {
-     client =await User.findByOrFail('scope', 'Cliente','id',id)
+     client =await User.findByOrFail('scope', 'Client','id',id)
     }
     catch(error) {
       return response.status(400).send();

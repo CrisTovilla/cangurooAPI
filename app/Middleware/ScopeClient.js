@@ -3,7 +3,7 @@
 class ScopeClient {
   async handle ({ auth,response }, next) {
     const user = auth.user
-    if(user.scope=='Cliente'){
+    if(user.scope=='Client'){
       await next()
     }else{
       return response
@@ -14,7 +14,7 @@ class ScopeClient {
   // for WebSocket
   async wsHandle ({ auth,response }, next) {
     const user = auth.user
-    if(user.scope=='Cliente'){
+    if(user.scope=='Client'){
       await next()
     }else{
       return response
