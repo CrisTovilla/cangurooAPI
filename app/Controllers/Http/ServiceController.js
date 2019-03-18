@@ -62,7 +62,7 @@ class ServiceController {
         date_time_required: time_required,
         reference: request.input('reference'),
         client: client.id,
-        price_deliver: "10",
+        price_deliver: request.input('price_deliver'),
         price_service: "50",
         service_status_type: 1,
       })

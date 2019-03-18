@@ -14,7 +14,8 @@ class StoreService {
       longitude_b:'required|string',
       service_type : 'required|string',
       date_time_required : 'required|string' ,
-      reference : 'required|string'       
+      reference : 'required|string' ,
+      price_deliver : 'required|string'       
     }
   }
 }
