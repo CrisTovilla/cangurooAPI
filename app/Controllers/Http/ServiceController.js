@@ -41,7 +41,7 @@ class ServiceController {
   async store({ auth, request, response }) {
     try {
       let time_required = new Date(request.input('date_time_required'))
-      let serviceType = await ServiceType.findBy('name', request.input('service_type'))
+      let serviceType = await ServiceType.findOrFail(request.input('service_type'))
       let location_a = await Location.create({
         'latitude': request.input('latitude_a'),
         'longitude': request.input('longitude_a'),
@@ -64,7 +64,7 @@ class ServiceController {
         reference: request.input('reference'),
         client: client.id,
         price_deliver: request.input('price_deliver'),
-        price_service: "50",
+        price_service: "0",
         service_status_type: 1,
       })
       const channel = Ws.getChannel('service').topic('service')
