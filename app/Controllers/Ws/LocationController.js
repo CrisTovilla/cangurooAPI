@@ -7,7 +7,7 @@ class LocationController {
   }
 
   onLocation(location){
-    this.socket.broadcastToAll('location', json(location))
+    this.socket.broadcastToAll('location',location)
   }
 }
 

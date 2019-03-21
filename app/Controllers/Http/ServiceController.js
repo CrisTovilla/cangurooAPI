@@ -6,7 +6,6 @@ const ServiceStatusType = use('App/Models/ServiceStatusType')
 const Service = use('App/Models/Service')
 const Ws = use('Ws')
 const User = use('App/Models/User')
-const Database = use('Database')
 /**
  * Resourceful controller for interacting with services
  */
