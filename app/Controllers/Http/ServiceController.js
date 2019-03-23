@@ -155,7 +155,7 @@ class ServiceController {
    * GET service/all/finished
    */
   async services_finished({  response }) {
-    var date=new Date(Date.now())
+    var date=Date.now()
     console.log("Actual date :",date)
     date.setHours(-1,-1,-1,-1)
     console.log("Yesterday Date :",date)
