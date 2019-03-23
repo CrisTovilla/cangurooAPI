@@ -158,15 +158,15 @@ class ServiceController {
   async finish({params,request, response}) {
     let{id}=params
     let{receiver_name,image_data,service}=request.only(['receiver_name','image_data','service'])
-    let service=await Service.findOrFail(id)
-    if(service.service_delivery==auth.user.id){
+    let _service=await Service.findOrFail(id)
+    if(_service.service_delivery==auth.user.id){
       let service_data_finished = await ServiceDataFinished.create({
         receiver_name,
         image_data,
         service
       })
-      service.service_status_type=3
-      await service.save()
+      _service.service_status_type=3
+      await _service.save()
       return response.status(200).json(service_data_finished)
     }
     return response.status(400).send({'msg':'No Delivery'});
