@@ -155,7 +155,7 @@ class ServiceController {
    * Display all services finished of all deliveries today.
    * GET service/:id/finish
    */
-  async finish({params,request, response}) {
+  async finish({auth,params,request, response}) {
     let{id}=params
     let{receiver_name,image_data,service}=request.only(['receiver_name','image_data','service'])
     let _service=await Service.findOrFail(id)
