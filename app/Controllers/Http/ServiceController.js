@@ -156,9 +156,10 @@ class ServiceController {
    */
   async services_finished({  response }) {
     var date=new Date(Date.now())
+    console.log("Actual date :",date.getDate())
     date.setDate(date.getDate())
     date.setHours(-1,-1,-1,-1)
-    console.log(date)
+    console.log("Yesterday Date :",date)
     const services=await Service
     .query()
     .orderBy('service_delivery')
