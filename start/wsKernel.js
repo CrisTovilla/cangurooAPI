@@ -33,6 +33,8 @@ const globalMiddleware = [
 */
 const namedMiddleware = {
   auth_admin:  'App/Middleware/ScopeAdmin',
+  auth_delivery:  'App/Middleware/ScopeDelivery',
+  auth_client:  'App/Middleware/ScopeClient',
 }
 
 

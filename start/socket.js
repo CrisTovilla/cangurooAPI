@@ -21,3 +21,4 @@ Ws.channel('service', 'ServiceController')
 Ws.channel('location', 'LocationController')
 
 Ws.channel('service_delivery', 'ServiceDeliveryController')
+.middleware(['auth_delivery'])
