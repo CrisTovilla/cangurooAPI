@@ -66,7 +66,11 @@ class ServiceDeliveryController {
    */
   async services({ auth, response }) {
     let user = await User.find(auth.user.id)
-    let services = await user.services_delivery().fetch()
+    let services = await Service
+    .query()
+    .where('service_delivery','=',user.id)
+    .where('service_status_type','=',2)
+    .fetch()
     for (let i in services.rows) {
       const service = services.rows[i]
       service.location_a = await service.location_a_().fetch()
