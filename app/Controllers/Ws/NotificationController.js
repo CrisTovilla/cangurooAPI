@@ -7,7 +7,7 @@ class NotificationController {
   }
 
   onNotification(notification){
-    this.socket.broadcastToAll('location', json(notification))
+    this.socket.broadcastToAll('notification', json(notification))
   }
 }
 

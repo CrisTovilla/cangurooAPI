@@ -230,6 +230,17 @@ class ServiceController {
       service.service_delivery=user.id
       service.service_status_type=2
       await service.save()
+      const channel = Ws.getChannel('service_delivery').topic('service_delivery')
+      if (channel) {
+        service.location_a = await service.location_a_().fetch()
+        service.location_b = await service.location_b_().fetch()
+        service.service_status_type = await service.serviceStatusType().fetch()
+        service.service_type = await service.serviceType().fetch()
+        if(service.client){
+          service.client = await service.client_().fetch()
+        }       
+        channel.broadcast('service_delivery', service)
+      }
       return response.status(200).json({'msg':'Updated'})      
     }
     return response.status(400).send({'msg':'No Delivery'});  
