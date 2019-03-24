@@ -3,6 +3,7 @@ const User= use('App/Models/User')
 const DeliveryLocation= use('App/Models/DeliveryLocation')
 const Database = use('Database')
 const Ws = use('Ws')
+const Service = use('App/Models/Service')
 /**
  * Resourceful controller for interacting with servicedeliveries
  */
