@@ -1,5 +1,6 @@
 'use strict'
 const User= use('App/Models/User')
+const Service = use('App/Models/Service')
 /**
  * Resourceful controller for interacting with clients
  */
@@ -59,7 +60,12 @@ class ClientController {
  */
 async services({ auth, response }) {
   let user = await User.find(auth.user.id)
-  let services = await user.services().fetch()
+  //let services = await user.services().fetch()
+  let services  = await Service
+  .query()
+  .orderBy('created_at','desc')
+  .having('client','=',user.id)
+  .fetch()
   for (let i in services.rows) {
     const service = services.rows[i]
     service.location_a = await service.location_a_().fetch()
