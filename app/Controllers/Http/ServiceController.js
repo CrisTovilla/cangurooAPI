@@ -255,7 +255,7 @@ class ServiceController {
     let user = await User.findOrFail(auth.user.id)
     const service = await Service.findOrFail(id)
     if(service.client==user.id){
-      const deliver_location=await DeliveryLocation.findByOrFail('delivery',service.delivery)
+      const deliver_location=await DeliveryLocation.findByOrFail('delivery',service.service_delivery)
       return response.status(200).json(deliver_location)
     }
     return response.status(400).send({'msg':'Service not client'});  
